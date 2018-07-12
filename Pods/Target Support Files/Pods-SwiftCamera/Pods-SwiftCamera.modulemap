@@ -1,0 +1,6 @@
+framework module Pods_SwiftCamera {
+  umbrella header "Pods-SwiftCamera-umbrella.h"
+
+  export *
+  module * { export * }
+}
