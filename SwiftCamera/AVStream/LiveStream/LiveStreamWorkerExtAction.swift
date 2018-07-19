@@ -41,6 +41,11 @@ extension LiveStreamWorker {
         }
     }
     
+    func startRecording() {
+        
+        self.movieWritter?.startRecording()
+    }
+    
     func updateVideoOrientation(_ orientation: AVCaptureVideoOrientation) {
         
         guard let myVideoDataOutput = self.myVideoDataOutput,

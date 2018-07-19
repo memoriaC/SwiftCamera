@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		23CBEBE9493EEE84E19389DD /* Pods_SwiftCamera.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C0FC7953F78AF376F18F6EAA /* Pods_SwiftCamera.framework */; };
+		616EAEF620FD7AE000F93088 /* MediaFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 616EAEF520FD7AE000F93088 /* MediaFileWriter.swift */; };
 		6170E14120F708A8007402EE /* EncoderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6170E14020F708A8007402EE /* EncoderProtocol.swift */; };
+		6174E1B420FF1A3C009878BD /* UIControlPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6174E1B320FF1A3C009878BD /* UIControlPanelView.swift */; };
 		617FA89620F47E150021406B /* ULawEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 617FA89520F47E150021406B /* ULawEncoder.swift */; };
 		6186376320E338CB00D5C56E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186376220E338CB00D5C56E /* AppDelegate.swift */; };
 		6186376520E338CB00D5C56E /* UIRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6186376420E338CB00D5C56E /* UIRootViewController.swift */; };
@@ -39,7 +41,9 @@
 
 /* Begin PBXFileReference section */
 		2DA9D022731CE1C5B3E921D2 /* Pods-SwiftCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftCamera/Pods-SwiftCamera.debug.xcconfig"; sourceTree = "<group>"; };
+		616EAEF520FD7AE000F93088 /* MediaFileWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaFileWriter.swift; sourceTree = "<group>"; };
 		6170E14020F708A8007402EE /* EncoderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncoderProtocol.swift; sourceTree = "<group>"; };
+		6174E1B320FF1A3C009878BD /* UIControlPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControlPanelView.swift; sourceTree = "<group>"; };
 		617FA89520F47E150021406B /* ULawEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ULawEncoder.swift; sourceTree = "<group>"; };
 		6186375F20E338CB00D5C56E /* SwiftCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6186376220E338CB00D5C56E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 			children = (
 				6186378520E339FE00D5C56E /* AVCamPreviewView.swift */,
 				6186378320E339DB00D5C56E /* UIVideoViewController.swift */,
+				6174E1B320FF1A3C009878BD /* UIControlPanelView.swift */,
 			);
 			path = UIVideoViewController;
 			sourceTree = "<group>";
@@ -156,6 +161,7 @@
 				6186378820E3689C00D5C56E /* LiveStreamWorker.swift */,
 				6186378A20E37F3200D5C56E /* LiveStreamWorkerExtAction.swift */,
 				6186378C20E3832500D5C56E /* LiveStreamWorkerExtOnCapture.swift */,
+				616EAEF520FD7AE000F93088 /* MediaFileWriter.swift */,
 			);
 			path = LiveStream;
 			sourceTree = "<group>";
@@ -326,12 +332,14 @@
 				"${BUILT_PRODUCTS_DIR}/ReactiveCocoa/ReactiveCocoa.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveSwift/ReactiveSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
+				"${BUILT_PRODUCTS_DIR}/SteviaLayout/Stevia.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveCocoa.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Stevia.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -364,9 +372,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6186378B20E37F3200D5C56E /* LiveStreamWorkerExtAction.swift in Sources */,
+				6174E1B420FF1A3C009878BD /* UIControlPanelView.swift in Sources */,
 				6170E14120F708A8007402EE /* EncoderProtocol.swift in Sources */,
 				6186378920E3689C00D5C56E /* LiveStreamWorker.swift in Sources */,
 				6186376520E338CB00D5C56E /* UIRootViewController.swift in Sources */,
+				616EAEF620FD7AE000F93088 /* MediaFileWriter.swift in Sources */,
 				61A3CD9420F32CF80037D5F6 /* RingBuffer.swift in Sources */,
 				617FA89620F47E150021406B /* ULawEncoder.swift in Sources */,
 				6186376320E338CB00D5C56E /* AppDelegate.swift in Sources */,
@@ -528,7 +538,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = EMCAP68ET6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SwiftCamera/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -547,7 +557,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = EMCAP68ET6;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SwiftCamera/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

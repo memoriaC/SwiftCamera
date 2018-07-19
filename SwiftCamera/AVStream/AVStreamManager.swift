@@ -24,6 +24,11 @@ class AVStreamManager: NSObject {
             return self.livestreamWorker.liveCaptureSession
         }
     }
+    var isRecording: MutableProperty<Bool> {
+        get {
+            return self.livestreamWorker.isRecording
+        }
+    }
     
     class var videoOrientation: AVCaptureVideoOrientation {
         get {
@@ -57,6 +62,11 @@ class AVStreamManager: NSObject {
     func startRunning() {
         
         self.livestreamWorker.startCapture(orientation: AVStreamManager.videoOrientation)
+    }
+    
+    func startRecording() {
+        
+        self.livestreamWorker.startRecording()
     }
     
     func updateVideoOrientation(_ orientation: AVCaptureVideoOrientation) {

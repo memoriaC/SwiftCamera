@@ -57,13 +57,12 @@ class ULawEncoder: NSObject, EncoderProtocol {
             guard let audioConverter = self.audioConverter else { return }
             
             guard let blockBuffer = CMSampleBufferGetDataBuffer(sampleBuffer) else { return }
-            //        CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer
             
-            //        let timeStamp = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
             var totalLength = Int(0)
             var dataPointer: UnsafeMutablePointer<Int8>?
             let status = CMBlockBufferGetDataPointer(blockBuffer, 0, nil, &totalLength, &dataPointer)
             guard status == kCMBlockBufferNoErr, totalLength > 0, dataPointer != nil else { return }
+            print("audio captured length: \(totalLength)")
             
             self.myRingBuffer.write(data: dataPointer!, size: totalLength)
             defer {
@@ -77,7 +76,7 @@ class ULawEncoder: NSObject, EncoderProtocol {
             var data = Data.init()
             repeat {
                 
-                var outAudioBufferList = AudioBufferList.init(mNumberBuffers: 1, mBuffers: AudioBuffer.init(mNumberChannels: 1, mDataByteSize: UInt32(totalLength / 2), mData: calloc(MemoryLayout<UInt8>.size, totalLength / 2)))
+                var outAudioBufferList = AudioBufferList.init(mNumberBuffers: 1, mBuffers: AudioBuffer.init(mNumberChannels: 1, mDataByteSize: UInt32(MemoryLayout<UInt8>.size * totalLength / 2), mData: calloc(MemoryLayout<UInt8>.size, totalLength / 2)))
                 var outDataPacketSize = UInt32(1)
                 var outPacketDesc = AudioStreamPacketDescription.init()
                 
@@ -94,7 +93,7 @@ class ULawEncoder: NSObject, EncoderProtocol {
                     }
                     
                 case -1:
-                    print("audio done: \(data.count)")
+                    print("audio done length: \(data.count)")
                     data.writeToFile(fileHandle: self.fileHandle)
                     outAudioBufferList.mBuffers.mData?.deallocate()
                     return
@@ -162,15 +161,10 @@ class ULawEncoder: NSObject, EncoderProtocol {
     }
     
     private func initFileWritter() -> FileHandle? {
-        let filestring = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last
-        let file = filestring?.appending("/ulaw.data")
-        do {
-            try FileManager.default.removeItem(atPath: file!)
-        }
-        catch {
-            
-        }
-        FileManager.default.createFile(atPath: file!, contents: nil, attributes: nil)
-        return FileHandle.init(forWritingAtPath: file!)
+        guard let file = FileHandle.getDataFilePath(type: .AudioStream) else { return nil }
+        
+        try? FileManager.default.removeItem(atPath: file)        
+        FileManager.default.createFile(atPath: file, contents: nil, attributes: nil)
+        return FileHandle.init(forWritingAtPath: file)
     }
 }

@@ -14,10 +14,10 @@ class UIVideoViewController: UIViewController {
     
     var previewView: AVCamPreviewView!
     var myAVStreamManager = AVStreamManager.shared
+    var controlPanel: UIControlPanelViewController!
     
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,12 +32,12 @@ class UIVideoViewController: UIViewController {
         self.view.layer.addSublayer(self.previewView.videoPreviewLayer)
         self.view.addSubview(self.previewView)
         
-        let tmpView = UIView()
-        tmpView.backgroundColor = UIColor.black
-        tmpView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(tmpView)
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[tmpView]|", options: .directionLeadingToTrailing, metrics: nil, views: ["tmpView" : tmpView]))
-        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[tmpView(32)]-|", options: .directionLeadingToTrailing, metrics: nil, views: ["tmpView" : tmpView]))
+        self.controlPanel = UIControlPanelViewController.init(streamManager: myAVStreamManager)
+        self.addChildViewController(self.controlPanel)
+        self.view.addSubview(self.controlPanel.view)
+        self.controlPanel.view.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[controlPanel]|", options: .directionLeadingToTrailing, metrics: nil, views: ["controlPanel" : controlPanel.view]))
+        self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[controlPanel(64)]-|", options: .directionLeadingToTrailing, metrics: nil, views: ["controlPanel" : controlPanel.view]))
     }
     
     override func viewWillAppear(_ animated: Bool) {

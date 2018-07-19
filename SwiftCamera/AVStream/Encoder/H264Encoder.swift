@@ -107,16 +107,11 @@ class H264Encoder: NSObject, EncoderProtocol {
     }
     
     private func initFileWritter() -> FileHandle? {
-        let filestring = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last
-        let file = filestring?.appending("/h264.data")
-        do {
-            try FileManager.default.removeItem(atPath: file!)
-        }
-        catch {
-            
-        }
-        FileManager.default.createFile(atPath: file!, contents: nil, attributes: nil)
-        return FileHandle.init(forWritingAtPath: file!)
+        guard let file = FileHandle.getDataFilePath(type: .VideoStream) else { return nil }
+        
+        try? FileManager.default.removeItem(atPath: file)
+        FileManager.default.createFile(atPath: file, contents: nil, attributes: nil)
+        return FileHandle.init(forWritingAtPath: file)
     }
     
     let vtCallback : @convention(c) (UnsafeMutableRawPointer?, UnsafeMutableRawPointer?, OSStatus, VTEncodeInfoFlags, CMSampleBuffer?) -> () = { (outputCallbackRefCon, sourceFrameRefCon, status, infoFlags, sampleBuffer) -> Swift.Void in

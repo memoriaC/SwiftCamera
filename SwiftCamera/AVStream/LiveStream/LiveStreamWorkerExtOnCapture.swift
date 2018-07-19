@@ -15,22 +15,13 @@ extension LiveStreamWorker: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapt
         
         if output == self.myVideoDataOutput {
             
-            guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-            
-            CVPixelBufferLockBaseAddress(imageBuffer, .readOnly)
-            
-            let inWidth = CVPixelBufferGetWidth(imageBuffer)
-            let inHeight = CVPixelBufferGetHeight(imageBuffer)
-            print("width: \(inWidth), height: \(inHeight)")
-            
             self.videoEncoder.input(sampleBuffer)
-            
-            CVPixelBufferUnlockBaseAddress(imageBuffer, .readOnly)
+            self.movieWritter?.input(sampleBuffer, type: .video)
         }
         
         else if output == self.myAudioDataOutput {
-            
             self.audioEncoder.input(sampleBuffer)
+            self.movieWritter?.input(sampleBuffer, type: .audio)
         }
     }
 }

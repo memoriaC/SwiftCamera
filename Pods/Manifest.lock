@@ -4,21 +4,25 @@ PODS:
   - ReactiveSwift (3.1.0):
     - Result (~> 3.2)
   - Result (3.2.4)
+  - SteviaLayout (4.3.0)
 
 DEPENDENCIES:
   - ReactiveCocoa (~> 7.0)
+  - SteviaLayout
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - ReactiveCocoa
     - ReactiveSwift
     - Result
+    - SteviaLayout
 
 SPEC CHECKSUMS:
   ReactiveCocoa: 476dae7ca790f40d30d186a1bd7ebae4290395d5
   ReactiveSwift: 5b26d2e988fe0eed2daf48c4054d1de74db50184
   Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  SteviaLayout: 4237718d4e9eaea2d530bd1426637735a7e19de6
 
-PODFILE CHECKSUM: fd9ea10cd9a2a1f4e3ccecf0ccf0f9797a2e445e
+PODFILE CHECKSUM: 28d3c88d58de2ad770a3283f65dc94d38f392ac0
 
 COCOAPODS: 1.5.3

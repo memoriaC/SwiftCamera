@@ -8,16 +8,24 @@
 
 import Foundation
 import AVFoundation
+import ReactiveSwift
 
 class LiveStreamWorker: NSObject {
     
     public var liveCaptureSession: AVCaptureSession!
+    public var isRecording: MutableProperty<Bool> {
+        get {
+            guard let writter = self.movieWritter else { return MutableProperty(false) }
+            return writter.isWritting
+        }
+    }
     var liveCaptureQueue: DispatchQueue!
     var myVideoDataOutput: AVCaptureVideoDataOutput?
     var myAudioDataOutput: AVCaptureAudioDataOutput?
     var videoGrantedResult = false
     var videoEncoder: H264Encoder!
     var audioEncoder: ULawEncoder!
+    var movieWritter: MediaFileWriter?
     
     class func getCaptureDevice(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         
@@ -32,9 +40,10 @@ class LiveStreamWorker: NSObject {
         self.liveCaptureSession = AVCaptureSession()
         self.videoEncoder = H264Encoder.init()
         self.audioEncoder = ULawEncoder.init()
+        self.movieWritter = MediaFileWriter.init()
         
         self.requireAuthorization()
-        self.setupAVCaptureSession()        
+        self.setupAVCaptureSession()
     }
     
     public func startCapture(orientation: AVCaptureVideoOrientation) {

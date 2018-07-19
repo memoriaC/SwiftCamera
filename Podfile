@@ -7,6 +7,7 @@ target 'SwiftCamera' do
 
   # Pods for SwiftCamera
   pod 'ReactiveCocoa', '~> 7.0'
+  pod 'SteviaLayout'
 
   target 'SwiftCameraTests' do
     inherit! :search_paths
