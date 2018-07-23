@@ -18,10 +18,15 @@ class AVStreamManager: NSObject {
     
     static let shared = AVStreamManager()
     
-    var livestreamWorker: LiveStreamWorker
+    var livestreamWorker: LiveStreamWorker!
     var videoCaptureSession: AVCaptureSession {
         get {
             return self.livestreamWorker.liveCaptureSession
+        }
+    }
+    var isCapturing: MutableProperty<Bool> {
+        get {
+            return self.livestreamWorker.isCapturing
         }
     }
     var isRecording: MutableProperty<Bool> {
@@ -45,12 +50,12 @@ class AVStreamManager: NSObject {
     }
     
     override init() {
-        self.livestreamWorker = LiveStreamWorker()
         super.init()
+        self.livestreamWorker = LiveStreamWorker()
         
         NotificationCenter.default.reactive.notifications(forName: .UIApplicationDidEnterBackground).observe
             { (signal) in
-            self.livestreamWorker.stopStreaming() 
+            self.livestreamWorker.stopStreaming()
         }
         
         NotificationCenter.default.reactive.notifications(forName: .UIApplicationWillEnterForeground).observe
@@ -67,6 +72,11 @@ class AVStreamManager: NSObject {
     func startRecording() {
         
         self.livestreamWorker.startRecording()
+    }
+    
+    func stopRecording() {
+        
+        self.livestreamWorker.stopRecording()
     }
     
     func updateVideoOrientation(_ orientation: AVCaptureVideoOrientation) {

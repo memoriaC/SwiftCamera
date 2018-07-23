@@ -38,6 +38,14 @@ class UIVideoViewController: UIViewController {
         self.controlPanel.view.translatesAutoresizingMaskIntoConstraints = false
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[controlPanel]|", options: .directionLeadingToTrailing, metrics: nil, views: ["controlPanel" : controlPanel.view]))
         self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[controlPanel(64)]-|", options: .directionLeadingToTrailing, metrics: nil, views: ["controlPanel" : controlPanel.view]))
+        
+        self.myAVStreamManager.isCapturing.signal.observeValues { (val) in
+            if val == true {
+                DispatchQueue.main.async {
+                    self.previewView.updateVideoOrientation(AVStreamManager.videoOrientation)
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

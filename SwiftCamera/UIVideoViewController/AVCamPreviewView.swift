@@ -50,9 +50,7 @@ public class AVCamPreviewView: UIView {
     
     public func updateVideoOrientation(_ orientation: AVCaptureVideoOrientation) {
     
-        guard let connection = self.videoPreviewLayer.connection else {
-            return
-        }
+        guard let connection = self.videoPreviewLayer.connection else { return }
         if connection.isVideoOrientationSupported {
             connection.videoOrientation = orientation
         }

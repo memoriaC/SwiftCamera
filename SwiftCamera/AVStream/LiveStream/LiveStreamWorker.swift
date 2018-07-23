@@ -13,6 +13,7 @@ import ReactiveSwift
 class LiveStreamWorker: NSObject {
     
     public var liveCaptureSession: AVCaptureSession!
+    public var isCapturing: MutableProperty<Bool>!
     public var isRecording: MutableProperty<Bool> {
         get {
             guard let writter = self.movieWritter else { return MutableProperty(false) }
@@ -22,7 +23,9 @@ class LiveStreamWorker: NSObject {
     var liveCaptureQueue: DispatchQueue!
     var myVideoDataOutput: AVCaptureVideoDataOutput?
     var myAudioDataOutput: AVCaptureAudioDataOutput?
-    var videoGrantedResult = false
+    var videoGrantedResult: MutableProperty<Bool>!
+    var videoSetupResult: MutableProperty<Bool>!
+    var orientation: AVCaptureVideoOrientation!
     var videoEncoder: H264Encoder!
     var audioEncoder: ULawEncoder!
     var movieWritter: MediaFileWriter?
@@ -36,61 +39,68 @@ class LiveStreamWorker: NSObject {
     
     override init() {
         super.init()
+        
+        self.videoGrantedResult = MutableProperty(false)
+        self.videoSetupResult = MutableProperty(false)
+        self.isCapturing = MutableProperty(false)
+        
         self.liveCaptureQueue = DispatchQueue(label: "liveCaptureQueue")
         self.liveCaptureSession = AVCaptureSession()
+        self.orientation = .landscapeRight
         self.videoEncoder = H264Encoder.init()
         self.audioEncoder = ULawEncoder.init()
         self.movieWritter = MediaFileWriter.init()
         
-        self.requireAuthorization()
-        self.setupAVCaptureSession()
+        self.videoGrantedResult.signal.observeValues { (val) in
+            if val == true {
+                DispatchQueue.main.async {
+                    self.setupAVCaptureSession()
+                }
+            }
+        }
+        
+        self.videoSetupResult.signal.observeValues { (val) in
+            if val == true {
+                self.liveCaptureQueue.async {
+                    self.startStreaming()
+                }
+            }
+        }
     }
     
     public func startCapture(orientation: AVCaptureVideoOrientation) {
-        
-        self.liveCaptureQueue.async {
-            
-            if self.videoGrantedResult {
-                self.updateVideoOrientation(orientation)
-                self.startStreaming()
-            }
-            else {
-                print("cannot start capture, camera is not granted.")
-            }
-        }
+        self.orientation = orientation
+        self.requireAuthorization()
     }
     
     func requireAuthorization() {
         
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            self.videoGrantedResult = true
+            self.videoGrantedResult.value = true
             break
         case .denied:
             break
         case .notDetermined:
-            self.liveCaptureQueue.suspend()
             AVCaptureDevice.requestAccess(for: .video) { (granted) in
-                
                 if (granted) {
-                    self.videoGrantedResult = true
-                    self.liveCaptureQueue.resume()
+                    self.videoGrantedResult.value = true
                 }
             }
         case .restricted:
             break
         }
+        
     }
     
     func setupAVCaptureSession() {
         
-        guard self.videoGrantedResult == true else {
-            return
-        }
+        guard self.videoGrantedResult.value == true else { return }
         
         self.liveCaptureSession.beginConfiguration()
         defer {
             self.liveCaptureSession.commitConfiguration()
+            self.videoSetupResult.value = true
         }
         
         // Video
@@ -156,7 +166,7 @@ class LiveStreamWorker: NSObject {
             connection.preferredVideoStabilizationMode = .auto
         }
         if connection.isVideoOrientationSupported {
-            connection.videoOrientation = .landscapeRight
+            connection.videoOrientation = self.orientation
         }
     }
     

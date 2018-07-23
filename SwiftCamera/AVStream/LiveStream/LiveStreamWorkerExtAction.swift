@@ -27,6 +27,8 @@ extension LiveStreamWorker {
              take a long time. We dispatch session setup to the sessionQueue so
              that the main queue isn't blocked, which keeps the UI responsive.
              */
+            
+            self.isCapturing.value = true
             self.liveCaptureSession.startRunning()
         }
     }
@@ -38,12 +40,17 @@ extension LiveStreamWorker {
         
         self.liveCaptureQueue.async {
             self.liveCaptureSession.stopRunning()
+            self.isCapturing.value = false
         }
     }
     
     func startRecording() {
         
         self.movieWritter?.startRecording()
+    }
+    func stopRecording() {
+        
+        self.movieWritter?.stopRecording()
     }
     
     func updateVideoOrientation(_ orientation: AVCaptureVideoOrientation) {
